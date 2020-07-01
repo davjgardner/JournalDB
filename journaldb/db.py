@@ -45,7 +45,7 @@ def init_app(app):
 @click.argument('datafile')
 @with_appcontext
 def import_data_command(datafile):
-    # Match the form '7/1/2020 - Wednesday' -> (7, 1, 2020, ( - Wednesday)?, Wednesday)
+    # Match the form '7/1/2020 - Wednesday' -> (7, 1, 2020,  - Wednesday, Wednesday)
     r = re.compile(r'(\d{1,2})\/(\d{1,2})\/(\d{2,4})(\s*-\s*(\w+))?')
     with open(datafile) as f:
         prev_date = None
@@ -53,7 +53,6 @@ def import_data_command(datafile):
         weekday = None
         entry_added = True
         db = get_db()
-        #l = f.readlines()
         lnum = -1
         error = False
         for line in f:
