@@ -23,8 +23,10 @@ def create_app(test_config=None):
     from . import db
     db.init_app(app)
 
-    from . import compose
-    app.register_blueprint(compose.bp)
+    from . import notes
+    app.register_blueprint(notes.bp)
+    app.add_url_rule('/', endpoint='index')
+
 
     @app.route('/hello')
     def hello():

@@ -1,4 +1,4 @@
-# compose.py
+# notes.py
 
 import functools
 
@@ -6,7 +6,7 @@ from flask import (Blueprint, flash, g, redirect, render_template, request, url_
 
 from journaldb.db import get_db
 
-bp = Blueprint('compose', __name__, url_prefix='/compose')
+bp = Blueprint('notes', __name__)
 
 @bp.route('/compose', methods=('GET', 'POST'))
 def compose():
@@ -26,8 +26,14 @@ def compose():
         if error is None:
             db.execute('INSERT INTO journal (date, body) VALUES (?, ?)', (date, body))
             db.commit()
-            return redirect(url_for('hello'))
+            return redirect(url_for('notes.index'))
 
         flash(error)
 
     return render_template('compose.html')
+
+@bp.route('/')
+def index():
+    db = get_db()
+    entries = db.execute('SELECT id, date, body FROM journal ORDER BY date DESC').fetchall()
+    return render_template('view.html', entries=entries)

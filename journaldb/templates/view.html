@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>{% block title %}Entries{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+{% for entry in entries %}
+<article class="post">
+  <header>
+    <div>
+      <h1>{{ entry['date'] }}</h1>
+    </div>
+    {# <!-- <a class="action" href="{{ url_for('notes.update', date=entry['date']) }}">Edit</a> --> #}
+  </header>
+  <p class="body">{{ entry['body'] }}</p>
+</article>
+{% if not loop.last %}
+<hr>
+{% endif %}
+{% endfor %}
+{% endblock %}
