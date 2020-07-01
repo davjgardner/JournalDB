@@ -5,6 +5,15 @@
 {% endblock %}
 
 {% block content %}
+
+<form method="post">
+  <label for="date">Date</label>
+  <input name="date" id="date" type="date" value="{{ date }}" required>
+  <label for="body">Entry</label>
+  <textarea name="body" id="body" type="text" autofocus required></textarea>
+  <input type="submit" value="Record">
+</form>
+<hr>
 {% for entry in entries %}
 <article class="post">
   <header>
