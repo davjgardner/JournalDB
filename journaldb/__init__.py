@@ -23,6 +23,9 @@ def create_app(test_config=None):
     from . import db
     db.init_app(app)
 
+    from . import compose
+    app.register_blueprint(compose.bp)
+
     @app.route('/hello')
     def hello():
         return 'Hello, World!'
