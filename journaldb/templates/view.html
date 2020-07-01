@@ -9,7 +9,7 @@
 <article class="post">
   <header>
     <div>
-      <h1>{{ entry['date'] }}</h1>
+      <h1>{{ entry['date'] }} - {{ entry['weekday'] }}</h1>
     </div>
     <a class="action" href="{{ url_for('notes.edit', id=entry['id']) }}">Edit</a>
   </header>

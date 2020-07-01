@@ -2,6 +2,9 @@
 
 import functools
 
+import datetime
+import calendar
+
 from flask import (Blueprint, flash, g, redirect, render_template, request, url_for)
 
 from journaldb.db import get_db
@@ -28,7 +31,8 @@ def compose():
             return redirect(url_for('notes.edit', id=e['id']))
 
         if error is None:
-            db.execute('INSERT INTO journal (date, body) VALUES (?, ?)', (date, body))
+            weekday = calendar.day_name[curr_date.weekday()]
+            db.execute('INSERT INTO journal (date, weekday, body) VALUES (?, ?, ?)', (date, weekday, body))
             db.commit()
             return redirect(url_for('notes.index'))
 
@@ -39,7 +43,7 @@ def compose():
 @bp.route('/')
 def index():
     db = get_db()
-    entries = db.execute('SELECT id, date, body FROM journal ORDER BY date DESC').fetchall()
+    entries = db.execute('SELECT id, date, weekday, body FROM journal ORDER BY date DESC').fetchall()
     return render_template('view.html', entries=entries)
 
 @bp.route('/<int:id>/edit', methods=('GET', 'POST'))
@@ -61,7 +65,8 @@ def edit(id):
             error = 'Entry cannot be empty.'
 
         if error is None:
-            db.execute('UPDATE journal SET date = ?, body = ? WHERE id = ?', (date, body, id))
+            weekday = weekday = calendar.day_name[curr_date.weekday()]
+            db.execute('UPDATE journal SET date = ?, weekday = ?, body = ? WHERE id = ?', (date, weekday, body, id))
             db.commit()
             return redirect(url_for('notes.index'))
 
