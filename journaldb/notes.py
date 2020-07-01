@@ -19,9 +19,13 @@ def compose():
         if not date:
             error = 'Date is required.'
         elif not body:
-            error = 'Body cannot be empty.'
-        elif db.execute('SELECT body FROM journal WHERE date = ?', (date,)).fetchone() is not None:
-            error = 'Date {} is already recorded.'.format(date)
+            error = 'Entry cannot be empty.'
+        e = db.execute('SELECT id FROM journal WHERE date = ?', (date,)).fetchone()
+        if e is not None:
+            error = 'Date {} is already recorded. Edit?'.format(date)
+            flash (error)
+            # TODO: save typed body text, show it in the edit screen
+            return redirect(url_for('notes.edit', id=e['id']))
 
         if error is None:
             db.execute('INSERT INTO journal (date, body) VALUES (?, ?)', (date, body))
@@ -37,3 +41,36 @@ def index():
     db = get_db()
     entries = db.execute('SELECT id, date, body FROM journal ORDER BY date DESC').fetchall()
     return render_template('view.html', entries=entries)
+
+@bp.route('/<int:id>/edit', methods=('GET', 'POST'))
+def edit(id):
+    db = get_db()
+    entry = db.execute('SELECT id, date, body FROM journal WHERE id = ?', (id,)).fetchone()
+
+    if entry is None:
+        abort(404, "Could not find the requested entry (id = {0}).".format(id))
+
+    if request.method == 'POST':
+        date = request.form['date']
+        body = request.form['body']
+        error = None
+
+        if not date:
+            error = 'Date is required.'
+        elif not body:
+            error = 'Entry cannot be empty.'
+
+        if error is None:
+            db.execute('UPDATE journal SET date = ?, body = ? WHERE id = ?', (date, body, id))
+            db.commit()
+            return redirect(url_for('notes.index'))
+
+    return render_template('edit.html', entry=entry)
+
+@bp.route('/<int:id>/delete', methods=('POST',))
+def delete(id):
+    db = get_db()
+    entry = db.execute('SELECT id, date, body FROM journal WHERE id = ?', (id,)).fetchone()
+    db.execute('DELETE FROM journal WHERE id = ?', (id,))
+    db.commit()
+    return redirect(url_for('notes.index'))

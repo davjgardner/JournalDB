@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>{% block title %}Edit entry for {{ entry['date'] }}{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<form method="post">
+  <label for="date">Date</label>
+  <input name="date" id="date" value="{{ request.form['date'] or entry['date'] }}" required>
+  <label for"body">Entry</label>
+  <textarea name="body" id="body" required>{{ request.form['body'] or entry['body'] }}</textarea>
+  <input type="submit" value="Save">
+</form>
+<form action="/">
+  <input type="submit" value="Cancel">
+</form>
+<hr>
+<form action="{{ url_for('notes.delete', id=entry['id']) }}" method="post">
+  <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+</form>
+{% endblock %}

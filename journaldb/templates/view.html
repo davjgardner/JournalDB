@@ -11,7 +11,7 @@
     <div>
       <h1>{{ entry['date'] }}</h1>
     </div>
-    {# <!-- <a class="action" href="{{ url_for('notes.update', date=entry['date']) }}">Edit</a> --> #}
+    <a class="action" href="{{ url_for('notes.edit', id=entry['id']) }}">Edit</a>
   </header>
   <p class="body">{{ entry['body'] }}</p>
 </article>
