@@ -1,0 +1,4 @@
+include journaldb/schema.sql
+graft journaldb/static
+graft journaldb/templates
+global-exclue *.pyc
