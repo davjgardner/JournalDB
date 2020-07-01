@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>{% block title %}Compose{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<form method="post">
+  <label for="date">Date</label>
+  <input name="date" id="date" type="date" required>
+  <label for="body">Entry</label>
+  <input name="body" id="body" type="text" required>
+</form>
+{% endblock %}

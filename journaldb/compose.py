@@ -2,7 +2,7 @@
 
 import functools
 
-from flask import (Blueprint, flash, g, render_template, request, url_for)
+from flask import (Blueprint, flash, g, redirect, render_template, request, url_for)
 
 from journaldb.db import get_db
 
@@ -30,4 +30,4 @@ def compose():
 
         flash(error)
 
-    return render_template('compose/compose.html')
+    return render_template('compose.html')
