@@ -44,6 +44,7 @@ def compose():
         date = request.form['date']
         body = request.form['body']
         return add_entry(date, body)
+    return render_template('compose.html')
 
 @bp.route('/', methods=('GET', 'POST'))
 def index():
