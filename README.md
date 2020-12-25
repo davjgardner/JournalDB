@@ -10,3 +10,27 @@ JournalDB is a simple self-hosted cloud journaling application created with Pyth
 4. Initialize the database with `flask init-db`
 5. Run with `flask run`
 6. Visit http://localhost:5000 and start journaling!
+
+## Start JournalDB on boot
+
+This is just one way to automatically start JournalDB. You may also want to consider a Docker container, or even running it with a real webserver.
+
+### Systemd Unit File
+
+```
+[Unit]
+Description=JournalDB cloud journaling system
+After=network.target
+
+[Service]
+Type=simple
+User=<your_user>
+
+ExecStart=/path/to/journaldb/run.sh
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Enable and start it with `sudo systemctl enable journaldb && sudo systemctl start journaldb`
